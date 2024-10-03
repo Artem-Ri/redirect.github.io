@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+    </style>
+    <script>
+        function getPlatform() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            if (/android/i.test(userAgent)) {
+                return "android";
+            }
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "ios";
+            }
+
+            if (/huawei/i.test(userAgent) || /hmscore/i.test(userAgent)) {
+                return "huawei";
+            }
+
+            return "unknown";
+        }
+
+        function attemptDeepLink(deepLinkUrl, storeUrl) {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS) {
+                // No direct attempt is made with iOS due to platform limitations,
+                // so we redirect the user to the App Store after a short delay.
+                setTimeout(function() {
+                    window.location.href = storeUrl;
+                }, 1000);
+            } else {
+                // For Android, we try to open the app using an Intent URL directly.
+                window.location.href = `intent://${deepLinkUrl}#Intent;package=ua.raiffeisen.myraif;scheme=https;end`;
+                setTimeout(function() {
+                    window.location.href = storeUrl;
+                }, 3000);
+            }
+        }
+
+        window.onload = function() {
+            const deepLinkUrl = 'my-raif.apps.raiffeisen.ua/main';
+            let storeUrl;
+            const platform = getPlatform();
+
+            switch (platform) {
+                case 'android':
+                    storeUrl = 'https://play.google.com/store/apps/details?id=ua.raiffeisen.myraif&hl=uk';
+                    attemptDeepLink(deepLinkUrl, storeUrl);
+                    break;
+                case 'ios':
+                    storeUrl = 'https://apps.apple.com/ru/app/myraif-%D0%B2%D1%96%D0%B4-%D1%80%D0%B0%D0%B9%D1%84%D1%84%D0%B0%D0%B9%D0%B7%D0%B5%D0%BD-%D0%B1%D0%B0%D0%BD%D0%BA%D1%83/id1582978231';
+                    attemptDeepLink(deepLinkUrl, storeUrl);
+                    break;
+                case 'huawei':
+                    storeUrl = 'https://appgallery.huawei.com/#/app/C107307877';
+                    // Opening apps on Huawei devices may vary; research Huawei AppGallery Deep Links if required.
+                    window.location.href = storeUrl;
+                    break;
+                default:
+                    window.location.href = 'https://play.google.com/store/apps/details?id=ua.raiffeisen.myraif&hl=uk';
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Potential message or branding can go here -->
+    </div>
+</body>
+</html>
