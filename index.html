@@ -23,15 +23,14 @@
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
             if (/android/i.test(userAgent)) {
+                if (/huawei/i.test(userAgent) || /hmscore/i.test(userAgent)) {
+                    return "huawei";
+                }
                 return "android";
             }
 
             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
                 return "ios";
-            }
-
-            if (/huawei/i.test(userAgent) || /hmscore/i.test(userAgent)) {
-                return "huawei";
             }
 
             return "unknown";
