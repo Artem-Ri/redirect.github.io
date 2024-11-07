@@ -22,10 +22,11 @@
         function getPlatform() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
+            if (/huawei/i.test(userAgent) || /hmscore/i.test(userAgent)) {
+                return "huawei";
+            }
+
             if (/android/i.test(userAgent)) {
-                if (/huawei/i.test(userAgent) || /hmscore/i.test(userAgent)) {
-                    return "huawei";
-                }
                 return "android";
             }
 
